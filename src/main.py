@@ -100,15 +100,15 @@ def infer_on_stream(args):
                                 (1920, 1080), True)
 	
 	frame_count = 0
-	for r, frame in feeder.next_batch():
-		if not r:
+	for ret, frame in feeder.next_batch():
+		if not ret:
 			break
 		frame_count +=1
 		key = cv2.waitKey(60)
 		try:
 			face_coords, cropped_image = face_detection_model.predict(frame)
 		except Exception as e:
-			rning("Could predict using model" + str(e) + " for frame " + str(frame_count))
+			logger.warning("Could predict using model" + str(e) + " for frame " + str(frame_count))
 			continue
 			
 def main():

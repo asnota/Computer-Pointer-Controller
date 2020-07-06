@@ -63,11 +63,25 @@ class Model_FaceDetection:
 
 
 	def preprocess_output(self, outputs):
-		'''
-		Before feeding the output of this model to the next model,
-		you might have to preprocess the output. This function is where you can do that.
-		'''
-		raise NotImplementedError
+		width, height = int(image.shape[1]), int(image.shape[0])
+		detections = []
+		cropped_image = image
+		coords = np.squeeze(coords)
+		try:
+			for coord in coords:
+				image_id, label, threshold, xmin, ymin, xmax, ymax = coord
+				if image_id == -1:
+					break
+				if label == 1 and threshold >= self.threshold:
+					xmin = int(xmin * width)
+					ymin = int(ymin * height)
+					xmax = int(xmax * width)
+					ymax = int(ymax * height)
+					detections.append([xmin, ymin, xmax, ymax])
+					cropped_image = image[ymin:ymax, xmin:xmax]
+		except Exception as e:
+			self.logger.error("Error While drawing bounding boxes on image in Face Detection Model" + str(e))
+		return detections, cropped_image
 		
 	def wait(self):
 		status = self.exec_network.requests[0].wait(-1)

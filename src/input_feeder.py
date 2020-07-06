@@ -35,11 +35,11 @@ class InputFeeder:
         Returns the next image from either a video file or webcam.
         If input_type is 'image', then it returns the same image.
         '''
-        print("cap read()", self.cap.read())
+        #print("cap read()", self.cap.read())
         while True:
             for _ in range(10):
-                _, frame=self.cap.read()
-            yield frame
+                ret, frame=self.cap.read()
+            yield ret, frame
 
 
     def close(self):
@@ -53,6 +53,6 @@ class InputFeeder:
 	    '''
         Returns frames per second prop.
         '''
-	    print("CV2 cap props", cv2.CAP_PROP_FPS)
-	    print("self cap get", self.cap.get(cv2.CAP_PROP_FPS))
+	    print("CV2 cap props:", cv2.CAP_PROP_FPS)
+	    print("cap.get():", self.cap.get(cv2.CAP_PROP_FPS))
 	    return int(self.cap.get(cv2.CAP_PROP_FPS))
