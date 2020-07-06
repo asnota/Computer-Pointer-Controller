@@ -82,11 +82,17 @@ def infer_on_stream(args):
 			logger.error("Unable to find specified model file" + str(model_path))
 			exit(1)
 	
-	#Load models
+	#Initialize models
 	face_detection_model = Model_FaceDetection(model_path_dict['FaceDetectionModel'], device_name, prob_threshold)
 	landmark_detection_model = Model_LandmarkDetection(model_path_dict['LandmarkRegressionModel'], device_name, prob_threshold)
 	head_pose_estimation_model = Model_HeadPoseEstimation(model_path_dict['HeadPoseEstimationModel'], device_name, prob_threshold)
 	gaze_estimation_model = Model_GazeEstimation(model_path_dict['GazeEstimationModel'], device_name, prob_threshold)
+	
+	#Load models
+	face_detection_model.load_model()
+	landmark_detection_model.load_model()
+	head_pose_estimation_model.load_model()
+	gaze_estimation_model.load_model()
 
 	mouse_controller = MouseController('medium', 'fast')
 

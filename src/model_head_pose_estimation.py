@@ -34,12 +34,10 @@ class Model_HeadPoseEstimation:
 		self.network = None
 
 	def load_model(self):
-		'''
-		TODO: You will need to complete this method.
-		This method is for loading the model to the device specified by the user.
-		If your model requires any Plugins, this is where you can load them.
-		'''
-		raise NotImplementedError
+		try:
+			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
+		except Exception as e:
+			self.logger.error("Error While Loading"+str(self.model_name)+str(e))
 
 	def predict(self, image):
 		'''
