@@ -43,6 +43,10 @@ def build_argparser():
                              "It can be CPU, GPU, FPGU, MYRID")
     parser.add_argument("-o", '--output_path', default='/results/', type=str)
     return parser
+	
+def main():
+    args = build_argparser().parse_args()
+    logger = logging.getLogger('main')
 
 
 if __name__ == '__main__':
