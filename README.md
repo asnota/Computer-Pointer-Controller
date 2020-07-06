@@ -33,7 +33,12 @@ cd C:\Users\frup75275\Documents\OpenVinoProject3\src
 ```
 3. Run the main.py file with arguments as below:
 ```
-python main.py -fd ../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml \ 
+python main.py
+```
+You may specify the optional arguments if you intend to use other input, device or models, for example here is a request with additional arguments:
+```
+python main.py 
+-fd ../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml \ 
 -lr ../intel/landmarks-regression-retail-0009/FP32-INT8/landmarks-regression-retail-0009.xml \ 
 -hp ../intel/head-pose-estimation-adas-0001/FP32-INT8/head-pose-estimation-adas-0001.xml \ 
 -ge ../intel/gaze-estimation-adas-0002/FP32-INT8/gaze-estimation-adas-0002.xml \ 
