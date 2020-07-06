@@ -22,6 +22,7 @@ class InputFeeder:
             self.input_file=input_file
     
     def load_data(self):
+        print("Loading data to feeder")
         if self.input_type=='video':
             self.cap=cv2.VideoCapture(self.input_file)
         elif self.input_type=='cam':
@@ -34,6 +35,7 @@ class InputFeeder:
         Returns the next image from either a video file or webcam.
         If input_type is 'image', then it returns the same image.
         '''
+        print("cap read()", self.cap.read())
         while True:
             for _ in range(10):
                 _, frame=self.cap.read()
@@ -46,4 +48,11 @@ class InputFeeder:
         '''
         if not self.input_type=='image':
             self.cap.release()
-
+			
+    def get_fps(self):
+	    '''
+        Returns frames per second prop.
+        '''
+	    print("CV2 cap props", cv2.CAP_PROP_FPS)
+	    print("self cap get", self.cap.get(cv2.CAP_PROP_FPS))
+	    return int(self.cap.get(cv2.CAP_PROP_FPS))

@@ -40,22 +40,27 @@ class Model_FaceDetection:
 		except Exception as e:
 			self.logger.error("Error While Loading"+str(self.model_name)+str(e))
 
-	def predict(self, image):
-		'''
-		TODO: You will need to complete this method.
-		This method is meant for running predictions on the input image.
-		'''
-		raise NotImplementedError
+	def predict(self, image, request_id=0):
+		try:
+			prepocessed_image = self.preprocess_input(image)
+			self.network.start_async(request_id, inputs={self.input_name: preprocessed_image})
+			if self.wait() == 0:
+				outputs = self.network.requests[0].outputs[self.output_name]
+				coords, cropped_image = self.preprocess_output(outputs, image)
+		except Exception as e:
+			self.logger.error("Error occured in predict() method of the Model_FaceDetection class")
+		return coords, cropped_image
 
-	def check_model(self):
-		raise NotImplementedError
 
 	def preprocess_input(self, image):
-		'''
-		Before feeding the data into the model for inference,
-		you might have to preprocess it. This function is where you can do that.
-		'''
-		raise NotImplementedError
+		try:
+			image = cv2.resize(image, (self.input_shape[3], self.input_shape[2]))
+			image = image.transpose((2, 0, 1))
+			image = image.reshape(1, *image.shape)
+		except Exception as e:
+			self.logger.error("Error While preprocessing Image in " + str(self.model_name) + str(e))
+		return image
+
 
 	def preprocess_output(self, outputs):
 		'''
@@ -63,3 +68,7 @@ class Model_FaceDetection:
 		you might have to preprocess the output. This function is where you can do that.
 		'''
 		raise NotImplementedError
+		
+	def wait(self):
+		status = self.exec_network.requests[0].wait(-1)
+		return status

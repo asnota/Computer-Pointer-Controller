@@ -15,8 +15,7 @@ FD_MODEL = "../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-ad
 LR_MODEL = "../intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009.xml"
 HP_MODEL = "../intel/human-pose-estimation-0001/FP32/human-pose-estimation-0001.xml"
 GE_MODEL = "../intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002.xml"
-VIDEO_PATH = "../bin/demo.mp4"
-
+VIDEO_PATH = "demo.mp4"
 
 
 def build_argparser():
@@ -94,9 +93,24 @@ def infer_on_stream(args):
 	head_pose_estimation_model.load_model()
 	gaze_estimation_model.load_model()
 
+	#Load video input and precise video output
 	mouse_controller = MouseController('medium', 'fast')
-
+	feeder.load_data()	
+	out_video = cv2.VideoWriter(os.path.join('output_video.mp4'), cv2.VideoWriter_fourcc('M','J','P','G'), int(feeder.get_fps()/10),
+                                (1920, 1080), True)
 	
+	frame_count = 0
+	for r, frame in feeder.next_batch():
+		if not r:
+			break
+		frame_count +=1
+		key = cv2.waitKey(60)
+		try:
+			face_coords, cropped_image = face_detection_model.predict(frame)
+		except Exception as e:
+			rning("Could predict using model" + str(e) + " for frame " + str(frame_count))
+			continue
+			
 def main():
 	args = build_argparser().parse_args()
 	infer_on_stream(args)		
