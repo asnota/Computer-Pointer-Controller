@@ -23,7 +23,7 @@ class Model_LandmarkDetection:
 			self.core = IECore()
 			self.model = IENetwork(self.model_structure, self.model_weights)
 		except Exception as e:
-			self.logger.error("Error while Initilizing" + str(self.model_name) + str(e))
+			self.logger.error("Error while initilizing" + str(self.model_name) + str(e))
 			raise ValueError("Could not initialise the network. Have you enterred the correct model path?")
 		
 		self.input_name = next(iter(self.model.inputs))
@@ -36,7 +36,7 @@ class Model_LandmarkDetection:
 		try:
 			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
 		except Exception as e:
-			self.logger.error("Error While Loading"+str(self.model_name)+str(e))
+			self.logger.error("Error occured in load_model() method of" + str(self.model_name)+str(e))
 
 	def predict(self, image, request_id=0):
 		left_eye_image, right_eye_image, eye_cords = [], [], []
