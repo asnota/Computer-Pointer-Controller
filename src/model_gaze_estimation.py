@@ -4,6 +4,7 @@ This has been provided just to give you an idea of how to structure your model c
 '''
 from openvino.inference_engine import IECore, IENetwork
 import numpy as np
+import math
 import cv2
 import logging
 
@@ -26,10 +27,9 @@ class Model_GazeEstimation:
 			self.logger.error("Error occured while initializing" + str(self.model_name) + str(e))
 			raise ValueError("Could not initialize the network. Have you enterred the correct model path?")
 		
-		self.input_name = next(iter(self.model.inputs))
-		self.input_shape = self.model.inputs[self.input_name].shape
-		self.output_name = next(iter(self.model.outputs))
-		self.output_shape = self.model.outputs[self.output_name].shape
+		self.input_name = [i for i in self.model.inputs.keys()]
+		self.input_shape = self.model.inputs[self.input_name[1]].shape
+		self.output_name = [o for o in self.model.outputs.keys()]		
 		self.network = None
 
 	def load_model(self):
@@ -56,12 +56,25 @@ class Model_GazeEstimation:
 		return mouse_coords, gaze_vector
 
 	def preprocess_input(self, image):
+		print("Received image: ", image.shape)
 		try:
-			image = cv2.resize(image, (self.input_shape[3], self.input_shape[2]))
-			image = image.transpose((2, 0, 1))
-			image = image.reshape(1, *image.shape)
+			print(self.input_shape[3])
+			print(self.input_shape[2])
+			print(image.shape)
+			image = cv2.resize(image, (self.input_shape[3], self.input_shape[2]), cv2.INTER_AREA)				
 		except Exception as e:
-			self.logger.error("Error occured in preprocess_input() method of " + str(self.model_name) + str(e))
+			self.logger.error("Error occured while image resize in preprocess_input() method of " + str(self.model_name) + str(e))
+		try:
+			image = image.transpose((2, 0, 1))
+			print("Image shape after transpose: ", image.shape)
+		except Exception as e:
+			self.logger.error("Error occured while image transpose in preprocess_input() method of " + str(self.model_name) + str(e))
+		try:
+			image = image.reshape(1, *image.shape)
+			print("Image shape after reshape: ", image.shape)
+		except Exception as e:
+			self.logger.error("Error occured while image reshape in preprocess_input() method of " + str(self.model_name) + str(e))
+		
 		return image
 
 	def preprocess_output(self, outputs, pose_output):
@@ -77,3 +90,7 @@ class Model_GazeEstimation:
 		except Exception as e:
 			self.logger.error("Error occured in preprocess_output() method of " + str(self.model_name) + str(e))
 		return mouse_coords, gaze_vector
+		
+	def wait(self):
+		status = self.network.requests[0].wait(-1)
+		return status
