@@ -109,7 +109,11 @@ def infer_on_stream(args):
 		try:
 			face_coords, cropped_image = face_detection_model.predict(frame)
 		except Exception as e:
-			logger.warning("Could not predict using model" + str(e) + " for frame " + str(frame_count))
+			logger.warning("Could not predict using model face_detection" + str(e) + " for frame " + str(frame_count))
+		try:
+			left_eye_image, right_eye_image, eye_coords = landmark_detection_model.predict(cropped_image)
+		except Exception as e:
+			logger.warning("Could not predict using model landmark_detection" + str(e) + " for frame " + str(frame_count))
 			continue
 			
 def main():
