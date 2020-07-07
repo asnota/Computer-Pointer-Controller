@@ -118,6 +118,10 @@ def infer_on_stream(args):
 			pose_output = head_pose_estimation_model.predict(cropped_image)
 		except Exception as e:
 			logger.warning("Could not predict using head_pose_estimation_model" + str(e) + " for frame " + str(frame_count))
+		try:
+			mouse_coord, gaze_vector = gaze_estimation_model.predict(left_eye_image, right_eye_image, pose_output)
+		except Exception as e:
+			logger.warning("Could not predict using gaze_estimation_estimation_model" + str(e) + " for frame " + str(frame_count))
 			continue
 			
 def main():

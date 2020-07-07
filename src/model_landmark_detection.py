@@ -36,7 +36,7 @@ class Model_LandmarkDetection:
 		try:
 			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
 		except Exception as e:
-			self.logger.error("Error occured in load_model() method of" + str(self.model_name)+str(e))
+			self.logger.error("Error occured in load_model() method of" + str(self.model_name) + str(e))
 
 	def predict(self, image, request_id=0):
 		left_eye_image, right_eye_image, eye_cords = [], [], []
