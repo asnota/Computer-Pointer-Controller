@@ -38,18 +38,18 @@ class Model_FaceDetection:
 		try:
 			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
 		except Exception as e:
-			self.logger.error("Error While Loading"+str(self.model_name)+str(e))
+			self.logger.error("Error occured in load_model() method of "+str(self.model_name)+str(e))
 			
 	def predict(self, image, request_id=0):
-		global prediction, cropped_image
+		preprocessed_image = self.preprocess_input(image)	
+		self.network.start_async(request_id, inputs={self.input_name: preprocessed_image})			
+		
 		try:
-			prepocessed_image = self.preprocess_input(image)
-			self.network.start_async(request_id, inputs={self.input_name: preprocessed_image})
 			if self.wait() == 0:
 				outputs = self.network.requests[0].outputs[self.output_name]
-				prediction, cropped_image = self.preprocess_output(outputs, image)
+				prediction, cropped_image = self.preprocess_output(outputs, image)				
 		except Exception as e:
-			self.logger.error("Error occured in predict() method of the Model_FaceDetection class")
+			self.logger.error("Error occured in predict() method of " + str(self.model_name) + str(e))
 		return prediction, cropped_image
 
 
@@ -59,15 +59,16 @@ class Model_FaceDetection:
 			image = image.transpose((2, 0, 1))
 			image = image.reshape(1, *image.shape)
 		except Exception as e:
-			self.logger.error("Error While preprocessing Image in " + str(self.model_name) + str(e))
+			self.logger.error("Error occured in preprocess_input() method of " + str(self.model_name) + str(e))
 		return image
 
 
-	def preprocess_output(self, coords, outputs):
+	def preprocess_output(self, outputs, image):
 		width, height = int(image.shape[1]), int(image.shape[0])
 		detections = []
 		cropped_image = image
-		coords = np.squeeze(coords)
+		coords = np.squeeze(image)
+		print(coords)
 		try:
 			for coord in coords:
 				image_id, label, threshold, xmin, ymin, xmax, ymax = coord
@@ -81,9 +82,9 @@ class Model_FaceDetection:
 					detections.append([xmin, ymin, xmax, ymax])
 					cropped_image = image[ymin:ymax, xmin:xmax]
 		except Exception as e:
-			self.logger.error("Error While drawing bounding boxes on image in Face Detection Model" + str(e))
+			self.logger.error("Error occured in preprocess_output() method of " + str(self.model_name) + str(e))
 		return detections, cropped_image
 		
 	def wait(self):
-		status = self.exec_network.requests[0].wait(-1)
+		status = self.network.requests[0].wait(-1)
 		return status
