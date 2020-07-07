@@ -24,8 +24,8 @@ class Model_HeadPoseEstimation:
 			self.core = IECore()
 			self.model = IENetwork(self.model_structure, self.model_weights)
 		except Exception as e:
-			self.logger.error("Error while initilizing" + str(self.model_name) + str(e))
-			raise ValueError("Could not initialise the network. Have you enterred the correct model path?")
+			self.logger.error("Error occured while initializing" + str(self.model_name) + str(e))
+			raise ValueError("Could not initialize the network. Have you enterred the correct model path?")
 		
 		self.input_name = next(iter(self.model.inputs))
 		self.input_shape = self.model.inputs[self.input_name].shape
@@ -44,11 +44,10 @@ class Model_HeadPoseEstimation:
 			preprocessed_image = self.preprocess_input(image)
 			self.network.start_async(request_id, inputs={self.input_name: preprocessed_image})
 			if self.wait() == 0:
-				outputs = self.network.requests[0].outputs
-				print("Outputs from head position", outputs)
-				
-				pose = self.preprocess_output(outputs)
-				
+				global pose
+				outputs = self.network.requests[0].outputs				
+				#print("Outputs from head position keys", outputs.keys())				
+				pose = self.preprocess_output(outputs)				
 		except Exception as e:
 			self.logger.error("Error occured in predict() method of " + str(self.model_name) + str(e))
 		return pose
@@ -63,9 +62,8 @@ class Model_HeadPoseEstimation:
 		return image
 
 	def preprocess_output(self, outputs):
-		pose_output = []
-		#print("Head position outputs: ", outputs[0])
-		try:		
+		pose_output = []		
+		try:
 			pose_output.append(outputs['angle_y_fc'][0][0])				
 			pose_output.append(outputs['angle_p_fc'][0][0])
 			pose_output.append(outputs['angle_r_fc'][0][0])

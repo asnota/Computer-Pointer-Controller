@@ -16,15 +16,15 @@ class Model_GazeEstimation:
 		self.model_weights = model_path.replace('.xml', '.bin')
 		self.device_name = device
 		self.threshold = threshold
-		self.logger = logging.getLogger('fd')
+		self.logger = logging.getLogger('ge')
 		self.model_name = 'Gaze Estimation Model'
 		
 		try:
 			self.core = IECore()
 			self.model = IENetwork(self.model_structure, self.model_weights)
 		except Exception as e:
-			self.logger.error("Error While Initilizing" + str(self.model_name) + str(e))
-			raise ValueError("Could not Initialise the network. Have you enterred the correct model path?")
+			self.logger.error("Error occured while initializing" + str(self.model_name) + str(e))
+			raise ValueError("Could not initialize the network. Have you enterred the correct model path?")
 		
 		self.input_name = next(iter(self.model.inputs))
 		self.input_shape = self.model.inputs[self.input_name].shape
