@@ -64,14 +64,17 @@ class Model_FaceDetection:
 
 
 	def preprocess_output(self, outputs, image):
-		width, height = int(image.shape[1]), int(image.shape[0])
+		width, height = int(image.shape[1]), int(image.shape[0])			
 		detections = []
-		cropped_image = image
-		coords = np.squeeze(image)
-		print(coords)
+		cropped_image = image		
+		coords = np.squeeze(outputs)
+		print("Coords shape: ", coords.shape)
 		try:
-			for coord in coords:
-				image_id, label, threshold, xmin, ymin, xmax, ymax = coord
+			for coord in coords:				
+				try:
+					image_id, label, threshold, xmin, ymin, xmax, ymax = coord
+				except Exception as e:
+					self.logger.error("Error occured in preprocess_output() method1.1 of " + str(self.model_name) + str(e))	
 				if image_id == -1:
 					break
 				if label == 1 and threshold >= self.threshold:
@@ -80,7 +83,7 @@ class Model_FaceDetection:
 					xmax = int(xmax * width)
 					ymax = int(ymax * height)
 					detections.append([xmin, ymin, xmax, ymax])
-					cropped_image = image[ymin:ymax, xmin:xmax]
+					cropped_image = image[ymin:ymax, xmin:xmax]					
 		except Exception as e:
 			self.logger.error("Error occured in preprocess_output() method of " + str(self.model_name) + str(e))
 		return detections, cropped_image
