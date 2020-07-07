@@ -56,22 +56,10 @@ class Model_GazeEstimation:
 		return mouse_coords, gaze_vector
 
 	def preprocess_input(self, image):
-		print("Received image: ", image.shape)
 		try:
-			print(self.input_shape[3])
-			print(self.input_shape[2])
-			print(image.shape)
 			image = cv2.resize(image, (self.input_shape[3], self.input_shape[2]), cv2.INTER_AREA)				
-		except Exception as e:
-			self.logger.error("Error occured while image resize in preprocess_input() method of " + str(self.model_name) + str(e))
-		try:
 			image = image.transpose((2, 0, 1))
-			print("Image shape after transpose: ", image.shape)
-		except Exception as e:
-			self.logger.error("Error occured while image transpose in preprocess_input() method of " + str(self.model_name) + str(e))
-		try:
 			image = image.reshape(1, *image.shape)
-			print("Image shape after reshape: ", image.shape)
 		except Exception as e:
 			self.logger.error("Error occured while image reshape in preprocess_input() method of " + str(self.model_name) + str(e))
 		
