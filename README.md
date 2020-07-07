@@ -3,11 +3,11 @@
 The project allows controlling the cursor of the mouse by a human gaze. Four pretrained models are used to detect human face, head pose, facial landmarks and, finally, human eye gaze.
 
 ## Project Set Up and Installation
-This project uses OpenVino distribution to perform inference, please find the instruction on this dependency installation followith the link:
+This project uses OpenVino distribution to perform inference, please find the instruction on this dependency installation following the link:
 <a href="https://docs.openvinotoolkit.org/2020.1/_docs_install_guides_installing_openvino_windows.html">
 https://docs.openvinotoolkit.org/2020.1/_docs_install_guides_installing_openvino_windows.html</a>
 
-The models used for the inference must be downloaded locally, please follow the following steps:
+The models used for the inference must be downloaded locally, please follow the steps described below:
 1. Go to the directory with the OpenVino installation to reach the downloader tool (your path may differ depending on the OpenVino distribution location on your computer as well as the version on OpenVino you have installed, please note that the installation instruction are given for Window):
 ```cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\deployment_tools\open_model_zoo\tools\downloader```
 
@@ -16,7 +16,7 @@ The models used for the inference must be downloaded locally, please follow the 
 
 3. Download each of 4 models using the downloader, precising the output directory:
 ```
-python downloader.py --name human-pose-estimation-0001 -o C:\Users\frup75275\Documents\OpenVinoProject3
+python downloader.py --name head_pose_estimation_adas_0001 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name face-detection-adas-binary-0001 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name landmarks-regression-retail-0009 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Documents\OpenVinoProject3
@@ -24,7 +24,8 @@ python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Docu
 
 ## Demo
 1. Initiatize OpenVino environment
-```cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\bin
+```
+cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\bin
 setupvars.bat
 ```
 2. Go to the src subfolder inside your cloned project folder:
@@ -35,7 +36,7 @@ cd C:\Users\frup75275\Documents\OpenVinoProject3\src
 ```
 python main.py
 ```
-You may specify the optional arguments if you intend to use other input, device or models, for example here is a request with additional arguments:
+You may specify the optional arguments if you intend to use another input, device or models, for example here is a request with additional arguments:
 ```
 python main.py 
 -fd ../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml \ 
@@ -46,7 +47,8 @@ python main.py
 ```
 
 ## Documentation
-*TODO:* Include any documentation that users might need to better understand your project code. For instance, this is a good place to explain the command line arguments that your project supports.
+The project contains 3 subfolders (src, intel, bin), where /src folder holds the code, /intel folder contains models and /bin folder contains the example video file.
+The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively. 
 
 ## Benchmarks
 *TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.

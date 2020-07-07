@@ -15,7 +15,7 @@ FD_MODEL = "../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-ad
 LR_MODEL = "../intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009.xml"
 HP_MODEL = "../intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001.xml"
 GE_MODEL = "../intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002.xml"
-VIDEO_PATH = "demo.mp4"
+VIDEO_PATH = "../bin/demo.mp4"
 
 
 def build_argparser():
