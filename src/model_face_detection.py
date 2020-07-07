@@ -39,17 +39,18 @@ class Model_FaceDetection:
 			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
 		except Exception as e:
 			self.logger.error("Error While Loading"+str(self.model_name)+str(e))
-
+			
 	def predict(self, image, request_id=0):
+		global prediction, cropped_image
 		try:
 			prepocessed_image = self.preprocess_input(image)
 			self.network.start_async(request_id, inputs={self.input_name: preprocessed_image})
 			if self.wait() == 0:
 				outputs = self.network.requests[0].outputs[self.output_name]
-				coords, cropped_image = self.preprocess_output(outputs, image)
+				prediction, cropped_image = self.preprocess_output(outputs, image)
 		except Exception as e:
 			self.logger.error("Error occured in predict() method of the Model_FaceDetection class")
-		return coords, cropped_image
+		return prediction, cropped_image
 
 
 	def preprocess_input(self, image):
@@ -62,7 +63,7 @@ class Model_FaceDetection:
 		return image
 
 
-	def preprocess_output(self, outputs):
+	def preprocess_output(self, coords, outputs):
 		width, height = int(image.shape[1]), int(image.shape[0])
 		detections = []
 		cropped_image = image
