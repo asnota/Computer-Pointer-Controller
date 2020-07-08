@@ -21,6 +21,10 @@ python downloader.py --name face-detection-adas-binary-0001 -o C:\Users\frup7527
 python downloader.py --name landmarks-regression-retail-0009 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Documents\OpenVinoProject3
 ```
+4. Create virtual environment in pour project directory:
+```
+python -m venv env
+```
 
 ## Demo
 1. Initiatize OpenVino environment
@@ -28,11 +32,15 @@ python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Docu
 cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\bin
 setupvars.bat
 ```
-2. Go to the src subfolder inside your cloned project folder:
+2. Activate previously created virtual environment from your project directory:
 ```
-cd C:\Users\frup75275\Documents\OpenVinoProject3\src
+.\env\Scripts\activate
 ```
-3. Run the main.py file with arguments as below:
+3. Go to the /src subfolder inside your project directory:
+```
+cd \src
+```
+4. Run the main.py file with arguments as below:
 ```
 python main.py
 ```
@@ -45,10 +53,19 @@ python main.py
 -ge ../intel/gaze-estimation-adas-0002/FP32-INT8/gaze-estimation-adas-0002.xml \ 
 -i ../bin/demo.mp4
 ```
+5. You may also use -flags to visualize the output of models used in the project (by default it's set to visualize the output from GazeEstimationModel):
+```
+-flags fd
+```
+fd: for FaceDetectionModel
+lr: for LandmarkRegressionModel
+hp: for HeadPoseEstimationModel
+ge: for GazeEstimationModel
 
 ## Documentation
 The project contains 3 subfolders (src, intel, bin), where /src folder holds the code, /intel folder contains models and /bin folder contains the example video file.
-The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively. 
+The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively.
+The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 
 ## Benchmarks
 *TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.

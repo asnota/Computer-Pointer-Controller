@@ -45,7 +45,7 @@ def build_argparser():
                         help="Specify path for input video file or cam for webcam")						
 						
     parser.add_argument("-flags", "---previewFlags", type=str, required=False, nargs='+',
-						default=['fd'],
+						default=['ge'],
                         help="Specify a flag from the list: fd, lr, hp, ge. Example usage: -flags fd "
 						"ff for FaceDetectionModel, fl for LandmarkRegressionModel"
 						"fh for HeadPoseEstimationModel, fg for GazeEstimationModel")
