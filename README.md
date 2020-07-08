@@ -63,13 +63,13 @@ python main.py
 ```
 -flags fd
 ```
-fd: for FaceDetectionModel
-lr: for LandmarkRegressionModel
-hp: for HeadPoseEstimationModel
-ge: for GazeEstimationModel
+- fd: for FaceDetectionModel
+- lr: for LandmarkRegressionModel
+- hp: for HeadPoseEstimationModel
+- ge: for GazeEstimationModel
 
 ## Documentation
-The project contains 4 subfolders (src, intel, bin, benchmarks), where /src folder holds the code, /intel folder contains models, /bin folder contains the example video file and /benchmarks folder contains the graphs taken out of benchmarks tests.
+The project contains 5 subfolders (src, intel, bin, benchmarks, env), where /src folder holds the code, /intel folder contains models, /bin folder contains the example video file, /benchmarks folder contains the graphs taken out of benchmarks tests and /env - virtual environment setups.
 The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively.
 The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 
@@ -81,7 +81,10 @@ The available in DL Workbench pretrained model from OpenVino model zoo (face-det
 The graph below shows that the lowest latency were achieved with a batch size of 1 (42.22 ms), whereas batch sizes of 10 (884.9 ms), 20 (1,811.86 ms) and 30 (2,633.22 ms) had no significant difference regarding this parameter. 
 The throughput for the last 3 cases had minor fluctuations (11.36 fps - 12.12 fps).
 The significant increase in throuput was achieved by parallel streams augmentation (4), where the batch size influenced mostly the latency: 1,824.31 ms for 30 batches vs 1,189.09 ms for 10 batches, at minor fluctuations in a throughput (31,96 fps vs 32,59 fps respectively).
+
 ![Group inference results](https://github.com/asnota/Computer-Pointer-Controller/blob/master/benchmarking/Group_inference_results.PNG)
 
+
 The execution time by layer also shows that convolution took the most time for this model, therefore any optimization might first address the possibilities of the convolution layers optimization. 
+
 ![face-detection-adas-0001](https://github.com/asnota/Computer-Pointer-Controller/blob/master/benchmarking/face-detection-adas-0001.PNG)
