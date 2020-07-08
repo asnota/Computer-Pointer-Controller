@@ -78,7 +78,7 @@ The benchmark tests were performed in DL Workbench metrics tool developped by In
 The available in DL Workbench pretrained model from OpenVino model zoo (face-detection-adas-0001) was tested with parallel streams from 1 to 4 and batch size range from 1 to 30 (with a batch step of 10) on a CPU device.  
 
 ## Results
-The graph below shows that the lowest latency were achieved with a batch size of 1 (42.22 ms), whereas batch sizes of 10 (884.9 ms), 20 (1,811.86 ms) and 30 (2,633.22). 
+The graph below shows that the lowest latency were achieved with a batch size of 1 (42.22 ms), whereas batch sizes of 10 (884.9 ms), 20 (1,811.86 ms) and 30 (2,633.22 ms) had no significant difference regarding this parameter. 
 The throughput for the last 3 cases had minor fluctuations (11.36 fps - 12.12 fps).
 The significant increase in throuput was achieved by parallel streams augmentation (4), where the batch size influenced mostly the latency: 1,824.31 ms for 30 batches vs 1,189.09 ms for 10 batches, at minor fluctuations in a throughput (31,96 fps vs 32,59 fps respectively).
 ![Group inference results](https://github.com/asnota/Computer-Pointer-Controller/blob/master/benchmarking/Group_inference_results.PNG)
