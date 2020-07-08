@@ -74,14 +74,14 @@ The main script is maintained in main.py file, whereas the classes to inference 
 The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 
 ## Benchmarks
-The benchmark tests were performed in DL Workbench metrics tool developped by Intel using CelebA Dataset (http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
-The available in DL Workbench pretrained model from OpenVino model zoo (face-detection-adas-0001) was tested with parallel stream from 1 to 2 and batch size range from 1 to 30 (with a batch step of 10) on a CPU device.  
+The benchmark tests were performed in DL Workbench metrics tool developped by Intel using CelebA dataset (http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
+The available in DL Workbench pretrained model from OpenVino model zoo (face-detection-adas-0001) was tested with parallel streams from 1 to 4 and batch size range from 1 to 30 (with a batch step of 10) on a CPU device.  
 
 ## Results
 The graph below shows that the lowest latency were achieved with a batch size of 1 (42.22 ms), whereas batch sizes of 10 (884.9 ms), 20 (1,811.86 ms) and 30 (2,633.22). 
 The throughput for the last 3 cases had minor fluctuations (11.36 fps - 12.12 fps).
 The significant increase in throuput was achieved by parallel streams augmentation (4), where the batch size influenced mostly the latency: 1,824.31 ms for 30 batches vs 1,189.09 ms for 10 batches, at minor fluctuations in a throughput (31,96 fps vs 32,59 fps respectively).
-![Group inference results](/benchmarking/Group_inference_results.png)
+![Group inference results](https://github.com/asnota/Computer-Pointer-Controller/blob/master/benchmarking/Group_inference_results.PNG)
 
 The execution time by layer also shows that convolution took the most time for this model, therefore any optimization might first address the possibilities of the convolution layers optimization. 
-![face-detection-adas-0001](/benchmarking/face-detection-adas-0001.png)
+![face-detection-adas-0001](https://github.com/asnota/Computer-Pointer-Controller/blob/master/benchmarking/face-detection-adas-0001.PNG)
