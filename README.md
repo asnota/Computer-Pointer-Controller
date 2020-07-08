@@ -8,23 +8,29 @@ This project uses OpenVino distribution to perform inference, please find the in
 https://docs.openvinotoolkit.org/2020.1/_docs_install_guides_installing_openvino_windows.html</a>
 
 The models used for the inference must be downloaded locally, please follow the steps described below:
-1. Go to the directory with the OpenVino installation to reach the downloader tool (your path may differ depending on the OpenVino distribution location on your computer as well as the version on OpenVino you have installed, please note that the installation instruction are given for Window):
+1. Clone the repository
+2. Go to the directory with the OpenVino installation to reach the downloader tool (your path may differ depending on the OpenVino distribution location on your computer as well as the version on OpenVino you have installed, please note that the installation instruction are given for Window):
 ```cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\deployment_tools\open_model_zoo\tools\downloader```
 
-2. Install dependencies for downloader.py:
+3. Install dependencies for downloader.py:
 ```pip install requests pyyaml```
 
-3. Download each of 4 models using the downloader, precising the output directory:
+4. Download each of 4 models using the downloader, precising the output directory:
 ```
 python downloader.py --name head_pose_estimation_adas_0001 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name face-detection-adas-binary-0001 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name landmarks-regression-retail-0009 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Documents\OpenVinoProject3
 ```
-4. Create virtual environment in pour project directory:
+5. Create virtual environment in pour project directory:
 ```
 python -m venv env
 ```
+6. Install dependencies:
+```
+pip install requirements.txt
+```
+
 
 ## Demo
 1. Initiatize OpenVino environment
@@ -63,21 +69,19 @@ hp: for HeadPoseEstimationModel
 ge: for GazeEstimationModel
 
 ## Documentation
-The project contains 3 subfolders (src, intel, bin), where /src folder holds the code, /intel folder contains models and /bin folder contains the example video file.
+The project contains 4 subfolders (src, intel, bin, benchmarks), where /src folder holds the code, /intel folder contains models, /bin folder contains the example video file and /benchmarks folder contains the graphs taken out of benchmarks tests.
 The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively.
 The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 
 ## Benchmarks
-*TODO:* Include the benchmark results of running your model on multiple hardwares and multiple model precisions. Your benchmarks can include: model loading time, input/output processing time, model inference time etc.
+The benchmark tests were performed in DL Workbench metrics tool developped by Intel using CelebA Dataset (http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
+The available in DL Workbench pretrained model from OpenVino model zoo (face-detection-adas-0001) was tested with parallel stream from 1 to 2 and batch size range from 1 to 30 (with a batch step of 10) on a CPU device.  
 
 ## Results
-*TODO:* Discuss the benchmark results and explain why you are getting the results you are getting. For instance, explain why there is difference in inference time for FP32, FP16 and INT8 models.
+The graph below shows that the lowest latency were achieved with a batch size of 1 (42.22 ms), whereas batch sizes of 10 (884.9 ms), 20 (1,811.86 ms) and 30 (2,633.22). 
+The throughput for the last 3 cases had minor fluctuations (11.36 fps - 12.12 fps).
+The significant increase in throuput was achieved by parallel streams augmentation (4), where the batch size influenced mostly the latency: 1,824.31 ms for 30 batches vs 1,189.09 ms for 10 batches, at minor fluctuations in a throughput (31,96 fps vs 32,59 fps respectively).
+![Group inference results](/benchmarking/Group_inference_results.png)
 
-## Stand Out Suggestions
-This is where you can provide information about the stand out suggestions that you have attempted.
-
-### Async Inference
-If you have used Async Inference in your code, benchmark the results and explain its effects on power and performance of your project.
-
-### Edge Cases
-There will be certain situations that will break your inference flow. For instance, lighting changes or multiple people in the frame. Explain some of the edge cases you encountered in your project and how you solved them to make your project more robust.
+The execution time by layer also shows that convolution took the most time for this model, therefore any optimization might first address the possibilities of the convolution layers optimization. 
+![face-detection-adas-0001](/benchmarking/face-detection-adas-0001.png)
