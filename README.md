@@ -46,30 +46,67 @@ setupvars.bat
 ```
 cd \src
 ```
-4. Run the main.py file with arguments as below:
+4. Run the main.py file:
 ```
 python main.py
 ```
-You may specify the optional arguments if you intend to use another input, device or models, for example here is a request with additional arguments:
+
+5. You may specify the optional arguments if you intend to use another input, device or models.
+
+5.1. Precise your models:
 ```
 python main.py 
--fd ../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml \ 
--lr ../intel/landmarks-regression-retail-0009/FP32-INT8/landmarks-regression-retail-0009.xml \ 
--hp ../intel/head-pose-estimation-adas-0001/FP32-INT8/head-pose-estimation-adas-0001.xml \ 
--ge ../intel/gaze-estimation-adas-0002/FP32-INT8/gaze-estimation-adas-0002.xml \ 
--i ../bin/demo.mp4
+-fd ../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-adas-binary-0001.xml 
+-lr ../intel/landmarks-regression-retail-0009/FP32-INT8/landmarks-regression-retail-0009.xml 
+-hp ../intel/head-pose-estimation-adas-0001/FP32-INT8/head-pose-estimation-adas-0001.xml 
+-ge ../intel/gaze-estimation-adas-0002/FP32-INT8/gaze-estimation-adas-0002.xml
+
 ```
-5. You may also use -flags to visualize the output of models used in the project (by default it's set to visualize the output from GazeEstimationModel):
+
+5.2. Precise your input:
+A video source:
+```
+-i video ../bin/demo.mp4
+```
+Or a webcam source:
+```
+-i cam
+```
+
+5.3. Precise your device (CPU by defauld), which can be CPU, GPU, FPGU or MYRIAD (a VPU device):
+```
+-d GPU
+```
+
+5.4. Precise the probability threshold (default is 0.6):
+```
+-prob 0.8
+```
+
+5.5. Precise the output folder for the output video file (default is /results):
+```
+-o /your_path
+```
+
+5.5. You may also use -flags to visualize the output of models used in the project (by default it's set to visualize the output from GazeEstimationModel):
 ```
 -flags fd
 ```
+Below is a list of possible arguments with the corresponding model's output to be visoualized:
 - fd: for FaceDetectionModel
 - lr: for LandmarkRegressionModel
 - hp: for HeadPoseEstimationModel
 - ge: for GazeEstimationModel
 
 ## Documentation
-The project contains 5 subfolders (src, intel, bin, benchmarks, env), where /src folder holds the code, /intel folder contains models, /bin folder contains the example video file, /benchmarks folder contains the graphs taken out of benchmarks tests and /env - virtual environment setups.
+The project contains 6 subfolders (src, intel, bin, benchmarks, env, results), where:
+- /src folder holds the code, 
+- /intel folder contains models, 
+- /bin folder contains the example video file, 
+- /benchmarks folder contains the graphs taken out of benchmarks tests, 
+- /env - virtual environment setups, 
+- /results for the video file output with masks.
+
 The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively.
 The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 

@@ -47,8 +47,8 @@ def build_argparser():
     parser.add_argument("-flags", "---previewFlags", type=str, required=False, nargs='+',
 						default=['ge'],
                         help="Specify a flag from the list: fd, lr, hp, ge. Example usage: -flags fd "
-						"ff for FaceDetectionModel, fl for LandmarkRegressionModel"
-						"fh for HeadPoseEstimationModel, fg for GazeEstimationModel")
+						"fd for FaceDetectionModel, lr for LandmarkRegressionModel"
+						"hp for HeadPoseEstimationModel, ge for GazeEstimationModel")
 
     parser.add_argument("-prob", "--prob_threshold", required=False, type=float,
                         default=0.6,
@@ -57,7 +57,7 @@ def build_argparser():
     parser.add_argument("-d", "--device", required=False, type=str, default='CPU',
                         help="Specify device for inference"
                              "It can be CPU, GPU, FPGU or MYRIAD")
-    parser.add_argument("-o", '--output_path', default='/results/', type=str)
+    parser.add_argument("-o", '--output_path', default='../results/', type=str)
     return parser
 	
 def draw_mask(frame, preview_flags, cropped_image, left_eye_image, right_eye_image, face_coords, eye_coords, pose_output, gaze_vector):
