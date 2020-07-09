@@ -110,6 +110,17 @@ The project contains 6 subfolders (src, intel, bin, benchmarks, env, results), w
 The main script is maintained in main.py file, whereas the classes to inference the models in model_ prefixed files. Two additional classes - input_feeder.py and mouse_controller.py provide additional handling on the batch feed and mouse manipulation respectively.
 The root directory contains README.md and requirement.txt files which should help with the required installations and project run.
 
+## Inference pipeline description
+The gaze detection model requires three prameters - the arrays of 2 eyes images and a head position, which is received from landmark detection and head position models respectively.
+And the above mentioned models require the array of the cropped human face image.
+Here is a prediction outputs after the inference on a single frame: 
+```
+face_coords, cropped_image.shape:  [[790, 102, 1036, 469]] (367, 246, 3)
+left_eye_image.shape, right_eye_image.shape, eye_coords:  (20, 20, 3) (20, 20, 3) [[62, 137, 82, 157], [178, 137, 198, 157]]
+pose_output [5.980412, -9.124736, -1.4861512]
+mouse_coords, gaze_vector (0.49180450284510924, 0.1335856156718123) [ 0.49510366  0.12078557 -0.7978018 ]
+```
+
 ## Benchmarks
 The benchmark tests were performed in DL Workbench metrics tool developped by Intel using CelebA dataset (http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html).
 The available in DL Workbench pretrained model from OpenVino model zoo (face-detection-adas-0001) was tested with parallel streams from 1 to 4 and batch size range from 1 to 30 (with a batch step of 10) on a CPU device.  
