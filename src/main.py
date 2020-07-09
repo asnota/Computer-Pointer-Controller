@@ -154,25 +154,25 @@ def infer_on_stream(args):
 		frame_count +=1
 		key = cv2.waitKey(60)
 		
-		#Get models output
+		#Inference pipeline 
 		try:
 			face_coords, cropped_image = face_detection_model.predict(frame)
-			#print("face_coords, cropped_image.shape: ", face_coords, cropped_image.shape)
+			print("face_coords, cropped_image.shape: ", face_coords, cropped_image.shape)
 		except Exception as e:
 			logger.warning("Could not predict using model face_detection_model" + str(e) + " for frame " + str(frame_count))
 		try:
 			left_eye_image, right_eye_image, eye_coords = landmark_detection_model.predict(cropped_image)
-			#print("left_eye_image.shape, right_eye_image.shape, eye_coords: ", left_eye_image.shape, right_eye_image.shape, eye_coords)
+			print("left_eye_image.shape, right_eye_image.shape, eye_coords: ", left_eye_image.shape, right_eye_image.shape, eye_coords)
 		except Exception as e:
 			logger.warning("Could not predict using landmark_detection_model" + str(e) + " for frame " + str(frame_count))
 		try:
 			pose_output = head_pose_estimation_model.predict(cropped_image)
-			#print("pose_output", pose_output)
+			print("pose_output", pose_output)
 		except Exception as e:
 			logger.warning("Could not predict using head_pose_estimation_model" + str(e) + " for frame " + str(frame_count))
 		try:
 			mouse_coords, gaze_vector = gaze_estimation_model.predict(left_eye_image, right_eye_image, pose_output)
-			#print("mouse_coords, gaze_vector", mouse_coords, gaze_vector)
+			print("mouse_coords, gaze_vector", mouse_coords, gaze_vector)
 		except Exception as e:
 			logger.warning("Could not predict using gaze_estimation_estimation_model" + str(e) + " for frame " + str(frame_count))
 			continue
