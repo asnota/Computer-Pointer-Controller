@@ -6,38 +6,21 @@ from openvino.inference_engine import IECore, IENetwork
 import numpy as np
 import cv2
 import logging
+from model import Model
 
-class Model_LandmarkDetection:
+class Model_LandmarkDetection(Model):
 	'''
 	Class for the Landmark Detection Model.
 	'''
 	def __init__(self, model_path, device='CPU', extensions=None, threshold=0.6):
-		self.model_structure = model_path
-		self.model_weights = model_path.replace('.xml', '.bin')
-		self.device_name = device
-		self.threshold = threshold
-		self.logger = logging.getLogger('ld')
-		self.model_name = 'Landmark Detection Model'
 		
-		try:
-			self.core = IECore()
-			self.model = IENetwork(self.model_structure, self.model_weights)
-		except Exception as e:
-			self.logger.error("Error occured while initializing" + str(self.model_name) + str(e))
-			raise ValueError("Could not initialize the network. Have you enterred the correct model path?")
-		
+		Model.__init__(self, model_path, device, extensions, threshold)
+		self.model_name = 'Landmark Detection Model'	
 		self.input_name = next(iter(self.model.inputs))
 		self.input_shape = self.model.inputs[self.input_name].shape
 		self.output_name = next(iter(self.model.outputs))
 		self.output_shape = self.model.outputs[self.output_name].shape
-		self.network = None
-
-	def load_model(self):
-		try:
-			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
-		except Exception as e:
-			self.logger.error("Error occured in load_model() method of" + str(self.model_name) + str(e))
-
+		
 	def predict(self, image, request_id=0):
 		left_eye_image, right_eye_image, eye_cords = [], [], []
 		try:
@@ -85,8 +68,3 @@ class Model_LandmarkDetection:
 		except Exception as e:
 			self.logger.error("Error occured in preprocess_output() method of " + str(self.model_name) + str(e))
 		return left_eye_image, right_eye_image, eye_cords
-		
-	def wait(self):
-		status = self.network.requests[0].wait(-1)
-		return status
-
