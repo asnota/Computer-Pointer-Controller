@@ -21,7 +21,7 @@ class Model_FaceDetection(Model):
 		self.input_name = next(iter(self.model.inputs))
 		self.input_shape = self.model.inputs[self.input_name].shape
 		self.output_name = next(iter(self.model.outputs))
-		self.output_shape = self.model.outputs[self.output_name].shape
+		self.output_shape = self.model.outputs[self.output_name].shape		
 		
 	def predict(self, image, request_id=0):
 		preprocessed_image = self.preprocess_input(image)	

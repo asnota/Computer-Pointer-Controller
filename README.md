@@ -26,7 +26,13 @@ python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Docu
 ```
 python -m venv env
 ```
-6. Install dependencies:
+
+6. Activate recently created virtual environment from your project directory:
+```
+.\env\Scripts\activate
+```
+
+7. Install dependencies:
 ```
 pip install requirements.txt
 ```
@@ -38,14 +44,17 @@ pip install requirements.txt
 cd C:\Program Files (x86)\IntelSWTools\openvino_2020.3.194\bin
 setupvars.bat
 ```
-2. Activate previously created virtual environment from your project directory:
+
+2. Activate virtual environment from your project directory:
 ```
 .\env\Scripts\activate
 ```
+
 3. Go to the /src subfolder inside your project directory:
 ```
 cd \src
 ```
+
 4. Run the main.py file:
 ```
 python main.py

@@ -102,7 +102,6 @@ def draw_mask(frame, preview_flags, cropped_image, left_eye_image, right_eye_ima
 
 def infer_on_stream(args):
 	#Initialise variables with parsed arguments
-	model_path_dict = {'FaceDetectionModel': args.faceDetectionModel,'LandmarkRegressionModel': args.landmarkRegressionModel,'HeadPoseEstimationModel': args.headPoseEstimationModel,'GazeEstimationModel': args.gazeEstimationModel}
 	input_file = args.input
 	device_name = args.device
 	preview_flags = args.previewFlags
@@ -121,18 +120,12 @@ def infer_on_stream(args):
 			exit(1)
 		feeder = InputFeeder(input_type='video', input_file=input_file)
 	
-	#Check the model input:
-	for model_path in list(model_path_dict.values()):
-		print(model_path)
-		if not os.path.isfile(model_path):
-			logger.error("Unable to find specified model file" + str(model_path))
-			exit(1)
 	
 	#Initialize models
-	face_detection_model = Model_FaceDetection(model_path_dict['FaceDetectionModel'], device_name, prob_threshold)
-	landmark_detection_model = Model_LandmarkDetection(model_path_dict['LandmarkRegressionModel'], device_name, prob_threshold)
-	head_pose_estimation_model = Model_HeadPoseEstimation(model_path_dict['HeadPoseEstimationModel'], device_name, prob_threshold)
-	gaze_estimation_model = Model_GazeEstimation(model_path_dict['GazeEstimationModel'], device_name, prob_threshold)
+	face_detection_model = Model_FaceDetection(args.faceDetectionModel, device_name, prob_threshold)
+	landmark_detection_model = Model_LandmarkDetection(args.landmarkRegressionModel, device_name, prob_threshold)
+	head_pose_estimation_model = Model_HeadPoseEstimation(args.headPoseEstimationModel, device_name, prob_threshold)
+	gaze_estimation_model = Model_GazeEstimation(args.gazeEstimationModel, device_name, prob_threshold)
 	
 	#Load models
 	face_detection_model.load_model()
@@ -186,10 +179,7 @@ def infer_on_stream(args):
 			logger.warning("Could not retrieve masks" + str(e))
 			
 		try:		
-			cv2.imshow('preview', final_frame)
-		except Exception as e:
-			logger.warning("Could not show preview" + str(e))		
-		try:	
+			cv2.imshow('preview', final_frame)		
 			out_video.write(final_frame)
 		except Exception as e:
 			logger.warning("Could not write the video" + str(e))

@@ -30,8 +30,7 @@ class Model:
 		self.output_shape = None
 		self.network = None
 
-
-	def load_model(self):
+	def load_model(self):		
 		try:
 			self.network = self.core.load_network(network=self.model, device_name=self.device_name, num_requests=1)
 		except Exception as e:
