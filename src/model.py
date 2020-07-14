@@ -19,10 +19,16 @@ class Model:
 		
 		try:
 			self.core = IECore()
-			self.model = IENetwork(self.model_structure, self.model_weights)
+			self.model = IENetwork(self.model_structure, self.model_weights)			
 		except Exception as e:
 			self.logger.error("Error occured while initializing" + str(self.model_name) + str(e))
 			raise ValueError("Could not initialize the network. Have you enterred the correct model path?")
+			
+		supported_layers = self.core.query_network(network=self.model, device_name="CPU")
+		unsupported_layers = [l for l in self.model.layers.keys() if l not in supported_layers]
+		if len(unsupported_layers) != 0:
+			raise ValueError("Unsupportedlayers found: {}".format(unsupported_layers))
+			exit(1)		
 		
 		self.input_name = None
 		self.input_shape = None
