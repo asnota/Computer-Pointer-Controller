@@ -133,10 +133,8 @@ def infer_on_stream(args):
 	head_pose_estimation_model.load_model()
 	gaze_estimation_model.load_model()
 
-	#Load video input and precise video output	
+	#Load video input	
 	feeder.load_data()	
-	out_video = cv2.VideoWriter(os.path.join('output_video.mp4'), cv2.VideoWriter_fourcc('M','J','P','G'), int(feeder.get_fps()/10),
-                                (1920, 1080), True)
 	
 	#Get models output and draw masks
 	frame_count = 0
@@ -179,7 +177,9 @@ def infer_on_stream(args):
 			logger.warning("Could not retrieve masks" + str(e))
 			
 		try:		
-			cv2.imshow('preview', final_frame)		
+			cv2.imshow('preview', final_frame)
+			fourcc = cv2.VideoWriter_fourcc('F','M','P','4')
+			out_video = cv2.VideoWriter('../results/out_video.mp4', fourcc, int(feeder.get_fps()/10), (1920, 1080), True)
 			out_video.write(final_frame)
 		except Exception as e:
 			logger.warning("Could not write the video" + str(e))

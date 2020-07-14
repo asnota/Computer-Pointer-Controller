@@ -40,15 +40,14 @@ class InputFeeder:
             for _ in range(10):
                 ret, frame=self.cap.read()
             yield ret, frame
-
-
+	
     def close(self):
         '''
-        Closes the VideoCapture.
+        Closes the VideoCapture.	
         '''
         if not self.input_type=='image':
             self.cap.release()
-			
+
     def get_fps(self):
 	    '''
         Returns frames per second prop.
