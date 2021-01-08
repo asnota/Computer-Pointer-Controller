@@ -34,7 +34,7 @@ python -m venv env
 
 7. Install dependencies:
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 
