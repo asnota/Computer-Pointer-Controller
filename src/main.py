@@ -15,7 +15,7 @@ FD_MODEL = "../intel/face-detection-adas-binary-0001/FP32-INT1/face-detection-ad
 LR_MODEL = "../intel/landmarks-regression-retail-0009/FP32/landmarks-regression-retail-0009.xml"
 HP_MODEL = "../intel/head-pose-estimation-adas-0001/FP32/head-pose-estimation-adas-0001.xml"
 GE_MODEL = "../intel/gaze-estimation-adas-0002/FP32/gaze-estimation-adas-0002.xml"
-VIDEO_PATH = "../bin/demo.mp4"
+VIDEO_PATH = "../bin/demo1.mp4"
 
 
 def build_argparser():
@@ -75,7 +75,7 @@ def draw_mask(frame, preview_flags, cropped_image, left_eye_image, right_eye_ima
 	if 'hp' in preview_flags:
 		cv2.putText(
 			frame,
-			"Pose Angles: yaw= {:.2f} , pitch= {:.2f} , roll= {:.2f}".format(
+			"            Pose: rotation= {:.2f} , pas= {:.2f} , roulis = {:.2f}".format(
 				pose_output[0], pose_output[1], pose_output[2]),
 			(20, 40),
 			cv2.FONT_HERSHEY_COMPLEX, 
@@ -84,19 +84,19 @@ def draw_mask(frame, preview_flags, cropped_image, left_eye_image, right_eye_ima
 	if 'ge' in preview_flags:
 		cv2.putText(
 			frame,
-			"Gaze Coordinates: x= {:.2f} , y= {:.2f} , z= {:.2f}".format(
+			"            Regard: x= {:.2f} , y= {:.2f} , z= {:.2f}".format(
 				gaze_vector[0], gaze_vector[1], gaze_vector[2]),
 			(20, 80),
 			cv2.FONT_HERSHEY_COMPLEX,
 			1, (0, 0, 0), 2)
 
-		x, y, w = int(gaze_vector[0] * 12), int(gaze_vector[1] * 12), 160
+		x, y, w = int(gaze_vector[0] * 6), int(gaze_vector[1] * 6), 160
 		left_eye = cv2.line(left_eye_image.copy(), (x - w, y - w), (x + w, y + w), (255, 0, 255), 2)
 		cv2.line(left_eye, (x - w, y + w), (x + w, y - w), (255, 0, 255), 2)
 		right_eye = cv2.line(right_eye_image.copy(), (x - w, y - w), (x + w, y + w), (255, 0, 255), 2)
 		cv2.line(right_eye, (x - w, y + w), (x + w, y - w), (255, 0, 255), 2)
-		preview_frame[eye_coords[0][1]:eye_coords[0][3], eye_coords[0][0]:eye_coords[0][2]] = left_eye
-		preview_frame[eye_coords[1][1]:eye_coords[1][3], eye_coords[1][0]:eye_coords[1][2]] = right_eye
+		#preview_frame[(eye_coords[0][1]):(eye_coords[0][3]), (eye_coords[0][0]):(eye_coords[0][2])] = left_eye
+		#preview_frame[eye_coords[1][1]:eye_coords[1][3], eye_coords[1][0]:eye_coords[1][2]] = right_eye
 
 	return preview_frame
 
