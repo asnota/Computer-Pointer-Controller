@@ -22,7 +22,7 @@ python downloader.py --name face-detection-adas-binary-0001 -o C:\Users\frup7527
 python downloader.py --name landmarks-regression-retail-0009 -o C:\Users\frup75275\Documents\OpenVinoProject3
 python downloader.py --name gaze-estimation-adas-0002 -o C:\Users\frup75275\Documents\OpenVinoProject3
 ```
-5. Create virtual environment in pour project directory:
+5. Create virtual environment in your project directory:
 ```
 python -m venv env
 ```
